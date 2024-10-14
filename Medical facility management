@@ -1,0 +1,140 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+// 医疗设施类
+class MedicalFacility {
+    private String facilityName;
+    private String location;
+    private String facilityType;
+    private int capacity;
+
+    // 构造方法
+    public MedicalFacility(String facilityName, String location, String facilityType, int capacity) {
+        this.facilityName = facilityName;
+        this.location = location;
+        this.facilityType = facilityType;
+        this.capacity = capacity;
+    }
+
+    // 获取医疗设施信息
+    public String getFacilityName() {
+        return facilityName;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public String getFacilityType() {
+        return facilityType;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    // 显示医疗设施信息
+    public void displayFacilityInfo() {
+        System.out.println("设施名称: " + facilityName);
+        System.out.println("位置: " + location);
+        System.out.println("设施类型: " + facilityType);
+        System.out.println("容量: " + capacity);
+    }
+}
+
+// 主类
+public class MedicalFacilityManagementSystem {
+    // 存储医疗设施的列表
+    private static ArrayList<MedicalFacility> facilityList = new ArrayList<>();
+    private static Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) {
+        boolean exit = false;
+
+        while (!exit) {
+            System.out.println("\n医疗设施管理系统");
+            System.out.println("1. 添加医疗设施");
+            System.out.println("2. 查看所有医疗设施");
+            System.out.println("3. 删除医疗设施");
+            System.out.println("4. 退出系统");
+            System.out.print("请选择操作: ");
+
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // 读取换行符
+
+            switch (choice) {
+                case 1:
+                    addFacility();
+                    break;
+                case 2:
+                    viewAllFacilities();
+                    break;
+                case 3:
+                    deleteFacility();
+                    break;
+                case 4:
+                    exit = true;
+                    System.out.println("退出系统。");
+                    break;
+                default:
+                    System.out.println("无效选择，请重新选择。");
+            }
+        }
+    }
+
+    // 添加医疗设施信息
+    private static void addFacility() {
+        System.out.println("请输入医疗设施信息：");
+        System.out.print("设施名称: ");
+        String facilityName = scanner.nextLine();
+
+        System.out.print("位置: ");
+        String location = scanner.nextLine();
+
+        System.out.print("设施类型: ");
+        String facilityType = scanner.nextLine();
+
+        System.out.print("容量: ");
+        int capacity = scanner.nextInt();
+        scanner.nextLine(); // 读取换行符
+
+        MedicalFacility newFacility = new MedicalFacility(facilityName, location, facilityType, capacity);
+        facilityList.add(newFacility);
+        System.out.println("医疗设施信息已添加。");
+    }
+
+    // 查看所有医疗设施信息
+    private static void viewAllFacilities() {
+        if (facilityList.isEmpty()) {
+            System.out.println("没有医疗设施信息。");
+        } else {
+            System.out.println("所有医疗设施信息：");
+            for (MedicalFacility facility : facilityList) {
+                facility.displayFacilityInfo();
+                System.out.println("------------------");
+            }
+        }
+    }
+
+    // 删除医疗设施信息
+    private static void deleteFacility() {
+        System.out.print("请输入要删除的医疗设施名称: ");
+        String facilityName = scanner.nextLine();
+
+        MedicalFacility facilityToDelete = null;
+
+        for (MedicalFacility facility : facilityList) {
+            if (facility.getFacilityName().equals(facilityName)) {
+                facilityToDelete = facility;
+                break;
+            }
+        }
+
+        if (facilityToDelete != null) {
+            facilityList.remove(facilityToDelete);
+            System.out.println("医疗设施信息已删除。");
+        } else {
+            System.out.println("未找到设施名称为 " + facilityName + " 的医疗设施。");
+        }
+    }
+}
