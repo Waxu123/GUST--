@@ -1,0 +1,140 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+// 患者类
+class Patient {
+    private String name;
+    private int age;
+    private String gender;
+    private String medicalRecordNumber;
+
+    // 构造方法
+    public Patient(String name, int age, String gender, String medicalRecordNumber) {
+        this.name = name;
+        this.age = age;
+        this.gender = gender;
+        this.medicalRecordNumber = medicalRecordNumber;
+    }
+
+    // 获取患者信息
+    public String getName() {
+        return name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public String getMedicalRecordNumber() {
+        return medicalRecordNumber;
+    }
+
+    // 显示患者信息
+    public void displayPatientInfo() {
+        System.out.println("姓名: " + name);
+        System.out.println("年龄: " + age);
+        System.out.println("性别: " + gender);
+        System.out.println("病历号: " + medicalRecordNumber);
+    }
+}
+
+// 主类
+public class PatientManagementSystem {
+    // 存储患者的列表
+    private static ArrayList<Patient> patientList = new ArrayList<>();
+    private static Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) {
+        boolean exit = false;
+
+        while (!exit) {
+            System.out.println("\n患者信息管理系统");
+            System.out.println("1. 添加患者信息");
+            System.out.println("2. 查看所有患者信息");
+            System.out.println("3. 删除患者信息");
+            System.out.println("4. 退出系统");
+            System.out.print("请选择操作: ");
+            
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // 读取换行符
+
+            switch (choice) {
+                case 1:
+                    addPatient();
+                    break;
+                case 2:
+                    viewAllPatients();
+                    break;
+                case 3:
+                    deletePatient();
+                    break;
+                case 4:
+                    exit = true;
+                    System.out.println("退出系统。");
+                    break;
+                default:
+                    System.out.println("无效选择，请重新选择。");
+            }
+        }
+    }
+
+    // 添加患者信息
+    private static void addPatient() {
+        System.out.println("请输入患者信息：");
+        System.out.print("姓名: ");
+        String name = scanner.nextLine();
+
+        System.out.print("年龄: ");
+        int age = scanner.nextInt();
+        scanner.nextLine(); // 读取换行符
+
+        System.out.print("性别: ");
+        String gender = scanner.nextLine();
+
+        System.out.print("病历号: ");
+        String medicalRecordNumber = scanner.nextLine();
+
+        Patient newPatient = new Patient(name, age, gender, medicalRecordNumber);
+        patientList.add(newPatient);
+        System.out.println("患者信息已添加。");
+    }
+
+    // 查看所有患者信息
+    private static void viewAllPatients() {
+        if (patientList.isEmpty()) {
+            System.out.println("没有患者信息。");
+        } else {
+            System.out.println("所有患者信息：");
+            for (Patient patient : patientList) {
+                patient.displayPatientInfo();
+                System.out.println("------------------");
+            }
+        }
+    }
+
+    // 删除患者信息
+    private static void deletePatient() {
+        System.out.print("请输入要删除的患者的病历号: ");
+        String medicalRecordNumber = scanner.nextLine();
+
+        Patient patientToDelete = null;
+
+        for (Patient patient : patientList) {
+            if (patient.getMedicalRecordNumber().equals(medicalRecordNumber)) {
+                patientToDelete = patient;
+                break;
+            }
+        }
+
+        if (patientToDelete != null) {
+            patientList.remove(patientToDelete);
+            System.out.println("患者信息已删除。");
+        } else {
+            System.out.println("未找到病历号为 " + medicalRecordNumber + " 的患者。");
+        }
+    }
+}
