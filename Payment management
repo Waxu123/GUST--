@@ -1,0 +1,165 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.Date;
+import java.text.SimpleDateFormat;
+
+// 缴费记录类
+class Payment {
+    private String payerName;
+    private String paymentType;
+    private double amount;
+    private String paymentDate;
+
+    // 构造方法
+    public Payment(String payerName, String paymentType, double amount, String paymentDate) {
+        this.payerName = payerName;
+        this.paymentType = paymentType;
+        this.amount = amount;
+        this.paymentDate = paymentDate;
+    }
+
+    // 获取缴费信息
+    public String getPayerName() {
+        return payerName;
+    }
+
+    public String getPaymentType() {
+        return paymentType;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public String getPaymentDate() {
+        return paymentDate;
+    }
+
+    // 显示缴费信息
+    public void displayPaymentInfo() {
+        System.out.println("缴费人姓名: " + payerName);
+        System.out.println("缴费类型: " + paymentType);
+        System.out.println("缴费金额: " + amount);
+        System.out.println("缴费日期: " + paymentDate);
+    }
+}
+
+// 主类
+public class PaymentManagementSystem {
+    private static ArrayList<Payment> paymentList = new ArrayList<>();
+    private static Scanner scanner = new Scanner(System.in);
+    private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+    public static void main(String[] args) {
+        boolean exit = false;
+
+        while (!exit) {
+            System.out.println("\n缴费管理系统");
+            System.out.println("1. 添加缴费记录");
+            System.out.println("2. 查看所有缴费记录");
+            System.out.println("3. 删除缴费记录");
+            System.out.println("4. 搜索缴费记录");
+            System.out.println("5. 退出系统");
+            System.out.print("请选择操作: ");
+
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // 读取换行符
+
+            switch (choice) {
+                case 1:
+                    addPayment();
+                    break;
+                case 2:
+                    viewAllPayments();
+                    break;
+                case 3:
+                    deletePayment();
+                    break;
+                case 4:
+                    searchPayment();
+                    break;
+                case 5:
+                    exit = true;
+                    System.out.println("退出系统。");
+                    break;
+                default:
+                    System.out.println("无效选择，请重新选择。");
+            }
+        }
+    }
+
+    // 添加缴费记录
+    private static void addPayment() {
+        System.out.println("请输入缴费信息：");
+        System.out.print("缴费人姓名: ");
+        String payerName = scanner.nextLine();
+
+        System.out.print("缴费类型: ");
+        String paymentType = scanner.nextLine();
+
+        System.out.print("缴费金额: ");
+        double amount = scanner.nextDouble();
+        scanner.nextLine(); // 读取换行符
+
+        String paymentDate = dateFormat.format(new Date()); // 获取当前日期
+
+        Payment newPayment = new Payment(payerName, paymentType, amount, paymentDate);
+        paymentList.add(newPayment);
+        System.out.println("缴费记录已添加。");
+    }
+
+    // 查看所有缴费记录
+    private static void viewAllPayments() {
+        if (paymentList.isEmpty()) {
+            System.out.println("没有缴费记录。");
+        } else {
+            System.out.println("所有缴费记录：");
+            for (Payment payment : paymentList) {
+                payment.displayPaymentInfo();
+                System.out.println("------------------");
+            }
+        }
+    }
+
+    // 删除缴费记录
+    private static void deletePayment() {
+        System.out.print("请输入要删除的缴费人姓名: ");
+        String payerName = scanner.nextLine();
+
+        Payment paymentToDelete = null;
+
+        for (Payment payment : paymentList) {
+            if (payment.getPayerName().equalsIgnoreCase(payerName)) {
+                paymentToDelete = payment;
+                break;
+            }
+        }
+
+        if (paymentToDelete != null) {
+            paymentList.remove(paymentToDelete);
+            System.out.println("缴费记录已删除。");
+        } else {
+            System.out.println("未找到缴费人姓名为 " + payerName + " 的缴费记录。");
+        }
+    }
+
+    // 搜索缴费记录
+    private static void searchPayment() {
+        System.out.print("请输入要搜索的缴费人姓名: ");
+        String payerName = scanner.nextLine();
+
+        boolean found = false;
+
+        for (Payment payment : paymentList) {
+            if (payment.getPayerName().equalsIgnoreCase(payerName)) {
+                payment.displayPaymentInfo();
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            System.out.println("未找到缴费人姓名为 " + payerName + " 的缴费记录。");
+        }
+    }
+}
