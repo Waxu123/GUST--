@@ -1,0 +1,199 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+// 药物类
+class Medicine {
+    private String medicineName;
+    private String category;
+    private int stock;
+    private double price;
+
+    // 构造方法
+    public Medicine(String medicineName, String category, int stock, double price) {
+        this.medicineName = medicineName;
+        this.category = category;
+        this.stock = stock;
+        this.price = price;
+    }
+
+    // 获取药物信息
+    public String getMedicineName() {
+        return medicineName;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public int getStock() {
+        return stock;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    // 显示药物信息
+    public void displayMedicineInfo() {
+        System.out.println("药物名称: " + medicineName);
+        System.out.println("类别: " + category);
+        System.out.println("库存: " + stock);
+        System.out.println("价格: " + price);
+    }
+
+    // 更新库存
+    public void updateStock(int newStock) {
+        this.stock = newStock;
+    }
+}
+
+// 主类
+public class MedicineManagementSystem {
+    // 存储药物的列表
+    private static ArrayList<Medicine> medicineList = new ArrayList<>();
+    private static Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) {
+        boolean exit = false;
+
+        while (!exit) {
+            System.out.println("\n药物管理系统");
+            System.out.println("1. 添加药物");
+            System.out.println("2. 查看所有药物");
+            System.out.println("3. 删除药物");
+            System.out.println("4. 搜索药物");
+            System.out.println("5. 更新药物库存");
+            System.out.println("6. 退出系统");
+            System.out.print("请选择操作: ");
+
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // 读取换行符
+
+            switch (choice) {
+                case 1:
+                    addMedicine();
+                    break;
+                case 2:
+                    viewAllMedicines();
+                    break;
+                case 3:
+                    deleteMedicine();
+                    break;
+                case 4:
+                    searchMedicine();
+                    break;
+                case 5:
+                    updateMedicineStock();
+                    break;
+                case 6:
+                    exit = true;
+                    System.out.println("退出系统。");
+                    break;
+                default:
+                    System.out.println("无效选择，请重新选择。");
+            }
+        }
+    }
+
+    // 添加药物信息
+    private static void addMedicine() {
+        System.out.println("请输入药物信息：");
+        System.out.print("药物名称: ");
+        String medicineName = scanner.nextLine();
+
+        System.out.print("类别: ");
+        String category = scanner.nextLine();
+
+        System.out.print("库存: ");
+        int stock = scanner.nextInt();
+
+        System.out.print("价格: ");
+        double price = scanner.nextDouble();
+        scanner.nextLine(); // 读取换行符
+
+        Medicine newMedicine = new Medicine(medicineName, category, stock, price);
+        medicineList.add(newMedicine);
+        System.out.println("药物信息已添加。");
+    }
+
+    // 查看所有药物信息
+    private static void viewAllMedicines() {
+        if (medicineList.isEmpty()) {
+            System.out.println("没有药物信息。");
+        } else {
+            System.out.println("所有药物信息：");
+            for (Medicine medicine : medicineList) {
+                medicine.displayMedicineInfo();
+                System.out.println("------------------");
+            }
+        }
+    }
+
+    // 删除药物信息
+    private static void deleteMedicine() {
+        System.out.print("请输入要删除的药物名称: ");
+        String medicineName = scanner.nextLine();
+
+        Medicine medicineToDelete = null;
+
+        for (Medicine medicine : medicineList) {
+            if (medicine.getMedicineName().equalsIgnoreCase(medicineName)) {
+                medicineToDelete = medicine;
+                break;
+            }
+        }
+
+        if (medicineToDelete != null) {
+            medicineList.remove(medicineToDelete);
+            System.out.println("药物信息已删除。");
+        } else {
+            System.out.println("未找到药物名称为 " + medicineName + " 的药物。");
+        }
+    }
+
+    // 搜索药物信息
+    private static void searchMedicine() {
+        System.out.print("请输入要搜索的药物名称: ");
+        String medicineName = scanner.nextLine();
+
+        boolean found = false;
+
+        for (Medicine medicine : medicineList) {
+            if (medicine.getMedicineName().equalsIgnoreCase(medicineName)) {
+                medicine.displayMedicineInfo();
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            System.out.println("未找到药物名称为 " + medicineName + " 的药物。");
+        }
+    }
+
+    // 更新药物库存
+    private static void updateMedicineStock() {
+        System.out.print("请输入要更新库存的药物名称: ");
+        String medicineName = scanner.nextLine();
+
+        Medicine medicineToUpdate = null;
+
+        for (Medicine medicine : medicineList) {
+            if (medicine.getMedicineName().equalsIgnoreCase(medicineName)) {
+                medicineToUpdate = medicine;
+                break;
+            }
+        }
+
+        if (medicineToUpdate != null) {
+            System.out.print("请输入新的库存数量: ");
+            int newStock = scanner.nextInt();
+            scanner.nextLine(); // 读取换行符
+
+            medicineToUpdate.updateStock(newStock);
+            System.out.println("药物库存已更新。");
+        } else {
+            System.out.println("未找到药物名称为 " + medicineName + " 的药物。");
+        }
+    }
+}
